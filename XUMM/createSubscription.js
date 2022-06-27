@@ -6,6 +6,10 @@ const main = async () => {
     const appInfo = await Sdk.ping()
     console.log(appInfo.application.name)
 
+    /**
+     * Please change the desination account to the account
+     * you own or you'll be testing sending the small amount of XRP to XRPL team
+     */
 
     const request = {
         "TransactionType": "Payment",
@@ -23,26 +27,56 @@ const main = async () => {
 
     
 
-    const subscription = await Sdk.payload.createAndSubscribe(request, event =>{
-        console.log('New payload event:', event.data)
+    const subscription = await Sdk.payload.createAndSubscribe(request, event => {
+        // console.log('New payload event:', event.data)
     
         //  The event data contains a property 'signed' (true or false), return :)
         
         if (event.data.signed === false) {
-            console.log(' The sign request was rejected :(')
+            // console.log(' The sign request was rejected :(')
             return false
-        } else {
-            console.log('Woohoo! The sign request was signed :)',event.data)
+        } 
+        
+        
+        if (event.data.signed === true) {
+            // console.log('Woohoo! The sign request was signed :)',event.data)
            return event.data
         }
-        }).then(created => {
+         }).then(xtz => {
 
-            console.log(created)
-        });
+            //  console.log(xtz)
+         })
 
 
         console.log("Subscription\n",subscription.created)
 
+
+        /**
+         * Now let's wait until the subscription resolved (by returning something)
+         * in the callback function
+         */
+
+
+        const resolveData = await subscription.resolved
+
+
+        if (resolveData.signed === false) {
+            console.log(' The sign request was rejected :(')
+        }
+
+        if (resolveData.signed === true) {
+            console.log('Woohoo! The sign request was signed')
+
+
+            /**
+             * Let's fetch the full payload end result, and get the issued
+             * user token, we can use to send our next payload per push notification
+             */
+
+
+        const result = await Sdk.payload.get(resolveData.payload_uuidv4)
+        console.log('User token:', result.application.issued_user_token)
+        }
 
 
 
