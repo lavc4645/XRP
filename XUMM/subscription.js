@@ -9,11 +9,11 @@ const main = async () => {
     const request = {
         "txjson": {
         "TransactionType": "Payment",
-        "Destination": "rHqjcvgDtH8qCR9uQcBxeiJmdpjvgsVKAx",
+        "Destination": "rni8M5tmDa2jYW7nw3rb2PqTmekAvhzoqU",
         "Amount": "100",
         
     },
-    "user_token": ""
+    "user_token": "47313f40-d477-4427-b4d3-edd8e5fd227b"
 }
 
 const subscription = await Sdk.payload.createAndSubscribe(request, event =>{
@@ -38,7 +38,7 @@ if (resolveData.signed === false) {
 } else {
     console.log('Woohoo! The sign request was signed :)')
 
- const result = await Sdk.payload.get(resoleveData.payload_uuidv4)
+ const result = await Sdk.payload.get(resolveData.payload_uuidv4)
  console.log('On ledger TX hash:', result.response.txid)
 }
 

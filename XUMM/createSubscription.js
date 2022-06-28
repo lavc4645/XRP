@@ -13,7 +13,7 @@ const main = async () => {
 
     const request = {
         "TransactionType": "Payment",
-        "Destination": "rHqjcvgDtH8qCR9uQcBxeiJmdpjvgsVKAx",
+        "Destination": "rni8M5tmDa2jYW7nw3rb2PqTmekAvhzoqU",
         "Amount": "100",
         "Memos": [
             {
@@ -27,28 +27,18 @@ const main = async () => {
 
     
 
-    const subscription = await Sdk.payload.createAndSubscribe(request, event => {
-        // console.log('New payload event:', event.data)
-    
-        //  The event data contains a property 'signed' (true or false), return :)
-        
-        if (event.data.signed === false) {
-            // console.log(' The sign request was rejected :(')
-            return false
-        } 
-        
-        
-        if (event.data.signed === true) {
-            // console.log('Woohoo! The sign request was signed :)',event.data)
-           return event.data
+    const subscription = await Sdk.payload.createAndSubscribe(request,event => {
+        console.log("event response code",event.data);
+        // return event.data
+        if (Object.keys(event.data).indexOf('signed') > -1) {
+           return event.data;
         }
-         }).then(xtz => {
+    })
+    console.log(subscription.created);
+    const resolved = await subscription.resolved;
+    console.log(resolved);
 
-            //  console.log(xtz)
-         })
-
-
-        console.log("Subscription\n",subscription.created)
+        // console.log("Subscription\n",subscription.created)
 
 
         /**
@@ -57,26 +47,26 @@ const main = async () => {
          */
 
 
-        const resolveData = await subscription.resolved
+        // const resolveData = await subscription.resolved
 
 
-        if (resolveData.signed === false) {
-            console.log(' The sign request was rejected :(')
-        }
+        // if (resolveData.signed === false) {
+        //     console.log(' The sign request was rejected :(')
+        // }
 
-        if (resolveData.signed === true) {
-            console.log('Woohoo! The sign request was signed')
-
-
-            /**
-             * Let's fetch the full payload end result, and get the issued
-             * user token, we can use to send our next payload per push notification
-             */
+        // if (resolveData.signed === true) {
+        //     console.log('Woohoo! The sign request was signed')
 
 
-        const result = await Sdk.payload.get(resolveData.payload_uuidv4)
+        //     /**
+        //      * Let's fetch the full payload end result, and get the issued
+        //      * user token, we can use to send our next payload per push notification
+        //      */
+
+
+        const result = await Sdk.payload.get(resolved.payload_uuidv4)
         console.log('User token:', result.application.issued_user_token)
-        }
+        // }
 
 
 
