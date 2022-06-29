@@ -29,7 +29,9 @@ const main = async () => {
 
     const subscription = await Sdk.payload.createAndSubscribe(request,event => {
         console.log("event response code",event.data);
-        // return event.data
+        
+
+        // it is used to hold the node untill the request get signed
         if (Object.keys(event.data).indexOf('signed') > -1) {
            return event.data;
         }
