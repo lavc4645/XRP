@@ -13,14 +13,17 @@ async function main(){
     // const test_wallet = fund_result.wallet;
     // console.log(fund_result)
 
+    const standby_wallet = xrpl.Wallet.fromSecret('shM7dTX1gvmTqpmMX7TJRUht6DLMR')
+    console.log(standby_wallet)
+
 
     // Get info from the ledger about the address we just funded
-    const response = await client.request({
-        "command": "account_info",
-        "account": "rHqjcvgDtH8qCR9uQcBxeiJmdpjvgsVKAx",
-        "ledger_index": "validated"
-    })
-    console.log(response);
+    // const response = await client.request({
+    //     "command": "account_info",
+    //     "account": "rHqjcvgDtH8qCR9uQcBxeiJmdpjvgsVKAx",
+    //     "ledger_index": "validated"
+    // })
+    // console.log(response);
 
 
 

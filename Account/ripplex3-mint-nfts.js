@@ -8,10 +8,12 @@ async function mintToken() {
   document.getElementById('standbyResultField').value = results
   let net = getNet()
   const standby_wallet = xrpl.Wallet.fromSeed(standbySeedField.value)
+  console.log("Standby wallet==============================>\n",standby_wallet )
   const client = new xrpl.Client(net)
   await client.connect()
   results += '\nConnected. Minting NFToken.'
   document.getElementById('standbyResultField').value = results
+  console.log("TokenURL======================",standbyTokenUrlField)
       
   // Note that you must convert the token URL to a hexadecimal 
   // value for this transaction.
@@ -40,6 +42,7 @@ async function mintToken() {
   document.getElementById('standbyResultField').value = results    
   client.disconnect()
 } //End of mintToken()
+mintToken()
 
 // *******************************************************
 // ******************* Get Tokens ************************

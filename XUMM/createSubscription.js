@@ -13,7 +13,7 @@ const main = async () => {
 
     const request = {
         "TransactionType": "Payment",
-        "Destination": "rni8M5tmDa2jYW7nw3rb2PqTmekAvhzoqU",
+        "Destination": "rHqjcvgDtH8qCR9uQcBxeiJmdpjvgsVKAx",
         "Amount": "100",
         "Memos": [
             {
