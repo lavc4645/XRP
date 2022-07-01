@@ -4,7 +4,7 @@ const Sdk = new XummSdk('5c9e4bd1-0f7a-4a7a-97c0-e2d7592a4e7d', 'd51f7b5f-d9da-4
 
 
 
-const main = async () => {
+const signIn = async () => {
     const appInfo = await Sdk.ping()
     console.log(appInfo.application.name)
 
@@ -33,7 +33,12 @@ const resolved = await subscription.resolved;
 // console.log("Resolved data +++++++++++++++++++++\n",resolved)
 
 const result = await Sdk.payload.get(resolved.payload_uuidv4)
-console.log('User token:', result.application.issued_user_token)
+// console.log('User token:', result.application.issued_user_token)
+const userToken = result.application.issued_user_token
+console.log (userToken);
 
 }
-main()
+signIn()
+// console.log (signIn().then((value)=>{
+//     console.log("value-->",value);
+// }))

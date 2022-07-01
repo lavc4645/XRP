@@ -1,0 +1,15 @@
+Your Devnet Credentials
+Address
+rUJtFGWStK7g8NwrNqG4WW6YvuTD5VQecU
+
+
+Secret
+spoB7AHfzTqbg1ihY4aGJiGSFwsR4
+
+
+Balance
+1,000 XRP
+
+
+Sequence Number
+19595061
