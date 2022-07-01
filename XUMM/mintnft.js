@@ -8,12 +8,12 @@ const main = async () => {
     const appInfo = await Sdk.ping()
     console.log(appInfo.application.name)
 
-    const standby_wallet = xrpl.Wallet.fromSecret('sEdVNrfUnkAgRqNiuueGtDqigpyE9nJ')
+    const standby_wallet = xrpl.Wallet.fromSecret('snLGWREShnRcecRo2vAuzbdwYg3TL')
     // console.log("Wallet details", standby_wallet)
 
 
     // Connection with "XRPL" client
-    const client = new xrpl.Client("wss://s.altnet.rippletest.net:51233")
+    const client = new xrpl.Client("wss://s.devnet.rippletest.net:51233")
     await client.connect()
 
 
@@ -82,8 +82,10 @@ const main = async () => {
 
     console.log("transaction data \n",tx.result.meta.TransactionResult)
     // console.log('json', J(nfts, null, 2))
+    console.log("nft object", nfts)
 
     const balance = await client.getXrpBalance(standby_wallet.address)
+    console.log("Balance",balance)
     client.disconnect()
 
 }
