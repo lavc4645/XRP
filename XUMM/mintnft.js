@@ -1,4 +1,4 @@
-const {XummSdk} = require('xumm-sdk')
+const { XummSdk } = require('xumm-sdk')
 const xrpl = require("xrpl");
 const Sdk = new XummSdk('5c9e4bd1-0f7a-4a7a-97c0-e2d7592a4e7d', 'd51f7b5f-d9da-4ffe-a06d-4a9e073171c0')
 
@@ -20,10 +20,10 @@ const main = async () => {
     // Converting the ipfs metadata to hexadecimal format
     const uri = xrpl.convertStringToHex("ipfs://QmR7AALJaHx8Qv48SCHnHTnqCmB8u7JQiH6qPbELB9ofWD")
     // console.log("This is our URI for the NFT \n", uri)
-    
-    
+
+
     // creating the payload
-    const raman = {
+    const request = {
 
         "TransactionType": "NFTokenMint",
         "Account": standby_wallet.classicAddress,
@@ -33,28 +33,33 @@ const main = async () => {
         "Fee": "10",
         "URI": uri
 
-      }
-      const raman2 = {
-        "TransactionType": "NFTokenMint",
-        "Account": standby_wallet.classicAddress,
-        "TransferFee": 314,
-        "NFTokenTaxon": 0,
-        "Flags": 8,
-        "URI": uri
-      }
+    }
+    const request2 = {
+        "txjson": {
+            "TransactionType": "NFTokenMint",
+            "Account": standby_wallet.classicAddress,
+            "TransferFee": 314,
+            "NFTokenTaxon": 0,
+            "Flags": 8,
+            "Fee": "10",
+            "URI": uri
+
+        },
+        "user_token": "a63a4925-c914-429b-9c27-c95e7392e6d1"
+    }
 
     // passing the payload to the payload object
     // const payload = await Sdk.payload.create(request, true)
     // console.log("Payload =================================+>\n ", payload)
 
-    const subscription = await Sdk.payload.createAndSubscribe(raman, event =>{
+    const subscription = await Sdk.payload.createAndSubscribe(request2, event => {
         console.log('New payload event:', event.data)
-    
+
         //  The event data contains a property 'signed' (true or false), return :)
         if (Object.keys(event.data).indexOf('signed') > -1) {
             return event.data
         }
-    
+
     })
 
     console.log('New payload created,URL:', subscription.created.next.always)
@@ -68,24 +73,28 @@ const main = async () => {
         console.log(' The sign request was rejected :(')
     } else {
         console.log('Woohoo! The sign request was signed :)')
-    
-     const result = await Sdk.payload.get(resolveData.payload_uuidv4)
-     console.log('On ledger TX hash:', result.response.txid)
+
+        const result = await Sdk.payload.get(resolveData.payload_uuidv4)
+        console.log('On ledger TX hash:', result.response.txid)
     }
     console.log(standby_wallet);
-    const tx = await client.submitAndWait(raman,{ wallet: standby_wallet})
+    const tx = await client.submitAndWait(request, { wallet: standby_wallet })
     console.log(tx);
     const nfts = await client.request({
         method: "account_nfts",
         account: standby_wallet.classicAddress
     })
 
-    console.log("transaction data \n",tx.result.meta.TransactionResult)
+    console.log("transaction data \n", tx.result.meta.TransactionResult)
     // console.log('json', J(nfts, null, 2))
-    console.log("nft object", nfts)
+    console.log("nft object", nfts.result)
+
+
+    const meta = xrpl.convertHexToString(uri)
+    console.log("NFT METADATA",meta)
 
     const balance = await client.getXrpBalance(standby_wallet.address)
-    console.log("Balance",balance)
+    console.log("Balance", balance)
     client.disconnect()
 
 }
