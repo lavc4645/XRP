@@ -6,7 +6,7 @@ const createBuyOffer = async () => {
     const appInfo = await Sdk.ping()
     console.log(appInfo.application.name)
 
-    const standby_wallet = xrpl.Wallet.fromSecret('snLyXS2F1feCdXzM6zqCQ9ZCBWie2')
+    const standby_wallet = xrpl.Wallet.fromSecret('sncVUL2SeJyn1TNyHmDqeNQ3C8L9p')
 
     const client = new xrpl.Client("wss://s.devnet.rippletest.net:51233")
     await client.connect()
@@ -23,14 +23,52 @@ const createBuyOffer = async () => {
 
 
     const transactionBlob = {
-        "TransactionType": "NFTokenCreateOffer",
-        "Account": standby_wallet.classicAddress,
-        "NFTokenID": nftokenId,
-        "Amount": "10000",
-        "Flags": 0
+        "txjson": {
+            "TransactionType": "NFTokenCreateOffer",
+            "Account": standby_wallet.classicAddress,
+            "Owner":"rUJtFGWStK7g8NwrNqG4WW6YvuTD5VQecU",
+            "NFTokenID": nftokenId,
+            "Amount": "1000",
+            "Fee": "10",
+            "Flags": 0    // buy Offer
+        },
+        "user_token": "47313f40-d477-4427-b4d3-edd8e5fd227b"
     }
 
-    const tx = await client.submitAndWait(transactionBlob, { wallet: standby_wallet })
+
+    // const transactionBlob = {
+    //     "TransactionType": "NFTokenCreateOffer",
+    //     "Account": standby_wallet.classicAddress,
+    //     "Owner": "rUJtFGWStK7g8NwrNqG4WW6YvuTD5VQecU",
+    //     "NFTokenID": nftokenId,
+    //     "Amount": "1000",
+    //     "Flags": 0    // buy Offer
+    // }
+
+    // push notification
+    const subscription = await Sdk.payload.createAndSubscribe(transactionBlob, event => {
+        console.log('New payload event:', event.data)
+
+        //  The event data contains a property 'signed' (true or false), return :)
+        if (Object.keys(event.data).indexOf('signed') > -1) {
+            return event.data
+        }
+
+    })
+    console.log("QR-Code",subscription.created.next)
+
+    // wait untills the push notification will resolve
+    const resolveData = await subscription.resolved
+    if (resolveData.signed === false) {
+        console.log(' The sign request was rejected :(')
+    } else {
+        console.log('Woohoo! The sign request was signed :)')
+
+        const result = await Sdk.payload.get(resolveData.payload_uuidv4)
+        console.log('On ledger TX hash:', result.response.txid)
+    }
+
+    // const tx = await client.submitAndWait(transactionBlob, { wallet: standby_wallet })
 
     /**
     * ****Sell Offers****
@@ -51,6 +89,7 @@ const createBuyOffer = async () => {
     /**
      * ****Buy Offers****
      */
+     console.log("***Buy Offers***")
     let nftBuyOffers
     try {
         nftBuyOffers = await client.request({
@@ -65,10 +104,10 @@ const createBuyOffer = async () => {
 
 
 
-    console.log("Transaction result:",
-        JSON.stringify(tx.result.meta.TransactionResult, null, 2))
-    console.log("Balance changes:",
-        JSON.stringify(xrpl.getBalanceChanges(tx.result.meta), null, 2))
+    // console.log("Transaction result:",
+    //     JSON.stringify(tx.result.meta.TransactionResult, null, 2))
+    // console.log("Balance changes:",
+    //     JSON.stringify(xrpl.getBalanceChanges(tx.result.meta), null, 2))
 
     client.disconnect()
 }

@@ -26,7 +26,7 @@ const createSellOffer = async () => {
             "TransactionType": "NFTokenCreateOffer",
             "Account": standby_wallet.classicAddress,
             "NFTokenID": nftokenId,
-            "Amount": "100000",
+            "Amount": "1000000",
             "Flags": 1    // sell Offer
         },
         "user_token": "47313f40-d477-4427-b4d3-edd8e5fd227b"

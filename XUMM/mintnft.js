@@ -94,9 +94,26 @@ const main = async () => {
 
 
     // console.log("transaction data ", tx.result.meta.TransactionResult, + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-    console.log('json', JSON.stringify(nfts, null, 2))
+    // console.log('json', JSON.stringify(nfts, null, 2))
+    
+    
+    
+    /**
+     * Adding the nft_url to the account_nfts array
+     * using map function
+     */
+    const total_nft = nfts.result.account_nfts 
+    console.log(total_nft)
+    const total = total_nft.map((v) => {
+        return {
+            ...v,               // (...) Spread operator
+            nft_url:xrpl.convertHexToString(v.URI)
+        }
+    });
     // console.log("Total NFT Details: ", nfts.result, + "\n\n\n\n\n\n\n\n")
 
+
+    console.log(total)
 
     const balance = await client.getXrpBalance("rUJtFGWStK7g8NwrNqG4WW6YvuTD5VQecU")
     console.log("Balance", balance)
