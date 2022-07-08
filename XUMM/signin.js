@@ -33,12 +33,14 @@ const resolved = await subscription.resolved;
 // console.log("Resolved data +++++++++++++++++++++\n",resolved)
 
 const result = await Sdk.payload.get(resolved.payload_uuidv4)
+console.log("Result +++++++." ,result)
 // console.log('User token:', result.application.issued_user_token)
 const userToken = result.application.issued_user_token
 console.log (userToken);
+return (result.response.account)
 
 }
-signIn()
-// console.log (signIn().then((value)=>{
-//     console.log("value-->",value);
-// }))
+// signIn()
+console.log (signIn().then((value)=>{
+    console.log("value-->",value);
+}))
