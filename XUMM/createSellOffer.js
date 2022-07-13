@@ -21,7 +21,7 @@ const createSellOffer = async () => {
     let nftokenId = nfts.result.account_nfts[0].NFTokenID
     console.log(nftokenId)
 
-    request = {
+    const request = {
         "txjson": {
             "TransactionType": "NFTokenCreateOffer",
             "Account": standby_wallet.classicAddress,
@@ -77,7 +77,7 @@ const createSellOffer = async () => {
     try {
         nftBuyOffers = await client.request({
             method: "nft_buy_offers",
-            nft_id: nftokenId 
+            nft_id: nftokenId
         })
     } catch (err) {
         console.log("No Buy offers.")
